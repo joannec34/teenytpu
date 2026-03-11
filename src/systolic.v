@@ -50,11 +50,12 @@ module systolic (
     );
 
     wire _unused_valid_12;
+    wire [7:0] _unused_pe_input_out_12;
     pe pe12 (
         .clk(clk), .rst_n(rst_n),
         .pe_valid_in(pe_valid_out_11), .pe_valid_out(_unused_valid_12),
         .pe_load_w(sys_load_w),
-        .pe_input_in(pe_input_out_11), .pe_input_out(),
+        .pe_input_in(pe_input_out_11), .pe_input_out(_unused_pe_input_out_12),
         .pe_psum_in(16'd0),            .pe_psum_out(pe_psum_out_12),
         .pe_weight_in(sys_weight_in_12)
     );
@@ -70,11 +71,12 @@ module systolic (
         .pe_weight_in(sys_weight_in_21)
     );
 
+    wire [7:0] _unused_pe_input_out_22;
     pe pe22 (
         .clk(clk), .rst_n(rst_n),
         .pe_valid_in(pe_valid_out_21), .pe_valid_out(pe_valid_out_22),
         .pe_load_w(sys_load_w),
-        .pe_input_in(pe_input_out_21), .pe_input_out(),
+        .pe_input_in(pe_input_out_21), .pe_input_out(_unused_pe_input_out_22),
         .pe_psum_in(pe_psum_out_12),   .pe_psum_out(sys_data_out_22),
         .pe_weight_in(sys_weight_in_22)
     );
@@ -82,6 +84,6 @@ module systolic (
     assign sys_valid_out_21 = pe_valid_out_21;
     assign sys_valid_out_22 = pe_valid_out_22;
 
-    wire _unused_sys = &{_unused_valid_12, 1'b0};
+    wire _unused_sys = &{_unused_valid_12, _unused_pe_input_out_12, _unused_pe_input_out_22, 1'b0};
 
 endmodule

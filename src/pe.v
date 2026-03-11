@@ -37,19 +37,20 @@ module pe (
             pe_input_out <= 8'd0;
             pe_psum_out  <= 16'd0;
             pe_valid_out <= 1'b0;
-            weight       <= 8'd0;
         end
         else begin
             pe_valid_out <= pe_valid_in;
-
-            if (pe_load_w)
-                weight <= pe_weight_in;
 
             if (pe_valid_in) begin
                 pe_input_out <= pe_input_in;
                 pe_psum_out  <= mac_result[15:0];
             end
         end
+    end
+
+    always @(posedge clk) begin
+        if (pe_load_w)
+            weight <= pe_weight_in;
     end
 
 endmodule
