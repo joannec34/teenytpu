@@ -71,12 +71,22 @@ module tpu (
             sys_start_2    <= 1'b0;
             sys_data_in_11 <= 8'd0;
             sys_data_in_21 <= 8'd0;
+            w_reg[0][0] <= 8'd0; w_reg[0][1] <= 8'd0;
+            w_reg[1][0] <= 8'd0; w_reg[1][1] <= 8'd0;
+            a_reg[0] <= 8'd0; a_reg[1] <= 8'd0;
         end
         else begin
             // default: deassert single-cycle pulses
             sys_load_w  <= 1'b0;
             sys_start_1 <= 1'b0;
             sys_start_2 <= 1'b0;
+
+            // SPI write handlers (active anytime)
+            if (wt_valid)
+                w_reg[wt_col_sel][wt_row_sel] <= wt_data;
+
+            if (act_valid)
+                a_reg[act_row_sel] <= act_data;
 
             // control FSM
             case (ctl_state)
@@ -126,15 +136,6 @@ module tpu (
 
             endcase
         end
-    end
-
-    // SPI write handlers (purely synchronous, no reset)
-    always @(posedge clk) begin
-        if (wt_valid)
-            w_reg[wt_col_sel][wt_row_sel] <= wt_data;
-
-        if (act_valid)
-            a_reg[act_row_sel] <= act_data;
     end
 
     // SPI bridge instance
